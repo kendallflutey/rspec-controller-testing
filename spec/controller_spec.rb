@@ -37,16 +37,19 @@ describe ItemController do
 
 	  describe "#edit" do 
 
+	  	let(:item) {double("item")}
+
 	  	#this calls the #get action before each test
 	  	before(:each) do 
-	      get :edit, id: 1
+	      get :edit, id: item
 	    end
 
 	    #uses mocks to test that find was called and the correct id is passed
 	    #change "Todo" to the name of your Class
 	    it "finds a specific item" do 
-	      Todo.should_recieve(:find).with(1)
+	      Todo.should_recieve(:find).once.and_return(item)
 	    end
+
 
 	    #there should be nothing to change here unless you render a view other than edit
 	    it "renders the edit view" do 
