@@ -29,11 +29,7 @@ describe ItemController do
 	end
 
 
-	def edit
-    @item = Item.find params[:id]
-  end
-
-  context "not hitting the database using stubs and doubles" do 
+  context "not hitting the database using mocks and doubles" do 
 
 	  describe "#edit" do 
 
@@ -57,7 +53,4 @@ describe ItemController do
 	    end
 	  end
 	end
-
-
-  
 end
