@@ -4,10 +4,11 @@ require 'spec_helper'
 describe ItemController do
   
   #these tests will hit the database
-  #change "item" to the appropriate model/instance name
-  describe "#edit" do 
+  describe "#edit while hitting the database" do 
 
-  	#this sets up an insatnce of Item to be used in our tests
+  	#this sets up an insatnce of "Item" to be used in our tests as "item"
+  	#change "Item" and "item" as appropriate
+  	#Also change attributes as needed or swap out for a Factory
     let(:item) {Item.create(first_attribute: "My name", second_attribute: 23)}
 
     #this calls the #get action before each test
@@ -15,7 +16,7 @@ describe ItemController do
       get :edit, id: item
     end
 
-    #change "item"
+    #change "item" to appropriate instance
     it "finds a specific item" do 
       expect(assigns(:item)).to eq(item)
     end
@@ -25,5 +26,7 @@ describe ItemController do
       expect(response).to render_template("edit")
     end
   end
+
+
   
 end
