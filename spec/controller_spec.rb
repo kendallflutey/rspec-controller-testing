@@ -30,8 +30,7 @@ describe ItemController do
       # In this context, we are writing tests that will NOT hit
       # the database. This can help test speeds, and remove coupling
       # with the model/db.
-
-      let {item_double: double("item_double")}
+      let(:item_double) { double("item_double")}
       # creating a double
 
       before(:each) do
@@ -73,7 +72,29 @@ describe ItemController do
           post :create, item: FactoryGirl.attributes_for(:item)
           expect(response).to redirect_to root_url
         end
+      end
 
+      context "not hitting the database" do
+        let(:item_double) { double("item_double")}
+
+        before(:each) do
+          Item.stub(:new).and_return(item_double)
+          item_double.stub(:save).and_return(true)
+          # we need to stub the #new and the #save methods on the
+          # class and double
+        end
+
+        it "creates a new item" do
+          post :create
+          #expect the instance of item to be a item_double.
+          expect(assigns(:item)).to be(item_double)
+        end
+
+        it "redirects to the correct url" do
+          #in this example we will test the root path
+          post :create
+          expect(response).to redirect_to root_url
+        end
       end
     end
   end
