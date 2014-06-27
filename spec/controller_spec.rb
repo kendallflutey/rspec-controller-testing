@@ -3,9 +3,10 @@ require 'spec_helper'
 #Change "ItemController" to the appropriate name
 describe ItemController do
 
-
+#--------------------------------------#
+#          The #new action          #
+#--------------------------------------#
   describe "The #new action" do
-
     context "hitting the database" do
       # In this context, we are writing tests that will hit the
       # database.
@@ -34,7 +35,7 @@ describe ItemController do
       # creating a double
 
       before(:each) do
-        Item.stub(:new).and_return(item_double)
+        Todo.stub(:new).and_return(item_double)
         # When the .new method is called on the Item class, return
         # the item_double. This stops the creation of a new instance
         # which stops the test hitting the database.
@@ -42,19 +43,18 @@ describe ItemController do
       end
 
       it "creates a new item" do
-        expects(assigns(:item)).to be(item_double)
+        expect(assigns(:item)).to be(item_double)
         #expect the instance of item to be a item_double.
       end
     end
   end
 
-
+#--------------------------------------#
+#          The #create action          #
+#--------------------------------------#
   describe "The #create action" do
-
     context "Valid params" do
-
       context "hitting the database" do
-
         it "creates a new Item" do
           expect{
           # expect can be passed a block
@@ -63,7 +63,7 @@ describe ItemController do
             # gem. This assigns the item: instance the attributes for an
             # item.
            }.to change(Item,:count).by(1)
-           # The rest of the test says the Item model should have one more
+           # The rest of the test says the item model should have one more
            # instance
         end
 
@@ -76,7 +76,6 @@ describe ItemController do
 
       context "not hitting the database" do
         let(:item_double) { double("item_double")}
-
         before(:each) do
           Item.stub(:new).and_return(item_double)
           item_double.stub(:save).and_return(true)
