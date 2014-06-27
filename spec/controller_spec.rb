@@ -133,10 +133,6 @@ describe ItemController do
 	  	#Also change attributes as needed or swap out for a Factory
 			let(:item) {Item.create(first_attribute: "My name", second_attribute: 23)}
 
-			#change "item" to appropriate instance
-	    it "finds a specific item" do
-	      expect(assigns(:item)).to eq(item)
-	    end
 
 			it "updates an item with valid params" do 
 				#this sends a post request to the #update item
@@ -154,7 +150,7 @@ describe ItemController do
 				expect(response).to redirect_to(item)
 			end
 
-			#this test assumes that validates :first_attribute, presence: true in Item model
+			#this test assumes that validates :first_attribute, presence: true is in Item model
 			#is redundant if no params validations
 			it "renders edit if params are invalid" do 
 				post :update, id: item, item: {first_attribute: nil, second_attribute: 23}
@@ -165,25 +161,22 @@ describe ItemController do
 		context "not hitting the database" do 
 
 			#this creates a double to stand in place of @item in controller
-			let(:item) {double("item")}
-
-			it "finds a specific item" do
-				#the order is different here; expectation first
-				#tests that find is called and our double is returned
-	      Todo.should_recieve(:find).once.and_return(item)
-	      post :update, id: item
-	    end
+			let(:todo) {double("todo")}
+      let(:attrs) {first_attribute: "Updated name", second_attribute: 23}
 
 			it "updates an item with valid params" do 
 				#we define the attrs that we will send through to be updated
-				attrs = {first_attribute: "Updated name", second_attribute: 23}
+			
+				Item.stub(:find).and_return(item)
 				#declares the method to be called in controller and what it's called with (attrs)
-				item.should_recieve(:update_attributes).with(attrs)
+				item.should_recieve(:update_attributes).with(attrs.stringify_keys)
 				post :update, id: item, item: attrs
 			end
 
 			it "redirects to item once updated" do
-				attrs = {first_attribute: "Updated name", second_attribute: 23}
+				item = stub_model(Item)
+				Item.stub(:find).and_return(item)
+				item.stub(:update_attributes).and_return(true)
 				post :update, id: item, item: attrs
 				#change redirect as desired
 				expect(response).to redirect_to(item)
@@ -192,11 +185,11 @@ describe ItemController do
 			it "renders edit if params are invalid" do 
 				#creates a double and defines the behaviour expected from update_attributes method
 				item = double("item", update_attributes: false) 
+				Item.stub(:find).and_return(item)
 				post :update, id: 1, item: item
 				#change view to render as required
     		expect(response).to render_template("edit")
 			end
-
 		end
 	end
 end
