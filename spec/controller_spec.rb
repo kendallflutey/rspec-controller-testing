@@ -11,7 +11,7 @@ describe ItemController do
 	  	#Also change attributes as needed or swap out for a Factory
 	    let(:item) {Item.create(first_attribute: "My name", second_attribute: 23)}
 
-	    #this calls the #get action before each test
+	    #this calls the #edit action before each test
 	    before(:each) do 
 	      get :edit, id: item
 	    end
