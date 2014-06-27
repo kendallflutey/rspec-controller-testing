@@ -135,13 +135,9 @@ describe ItemController do
 
 			it "updates an item with valid params" do 
 				#this sends a post request to the #update item
-				#it also passes the params it needs ("id" & "item")
-				#we are changing the "first_attribute" when we send the item params
+				#it also passes the params it needs ("id" & "item") with the update
 				post :update, id: item, item: {first_attribute: "Updated name", second_attribute: 23}
-				#we reload the "item" to ensure it is up-to-date with the "item" in our controller
-				#that we have just updated
 				item.reload
-				#now we test that the reloaded "item" has the "Updated name"
 				expect(item.first_attribute).to eq("Updated name")
 			end
 
