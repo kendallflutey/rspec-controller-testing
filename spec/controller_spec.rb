@@ -104,10 +104,6 @@ describe ItemController do
 	      expect(response).to render_template("edit")
 	    end
 	  end
-	end
-
-
-  describe "#edit" do
 
   	context "not hitting the database using mocks and doubles" do
 
