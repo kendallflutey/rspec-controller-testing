@@ -98,7 +98,9 @@ describe ItemController do
     end
   end
 
-
+#--------------------------------------#
+#          The #edit action          #
+#--------------------------------------#
   describe "#edit" do
 
 	  context "hitting the database" do
@@ -142,6 +144,9 @@ describe ItemController do
 	  end
 	end
 
+#--------------------------------------#
+#          The #update action          #
+#--------------------------------------#
 	describe "#update" do 
 
 		context "hitting the database" do 
