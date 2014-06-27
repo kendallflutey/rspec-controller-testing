@@ -146,11 +146,15 @@ describe ItemController do
 				expect(item.first_attribute).to eq("Updated name")
 			end
 
-			it "redirects to item once updated" do 
+			it "redirects to item once updated" do
+				#update "item" throughout as needed
+				#sending item: can be done with a factory and one explicit change
 				post :update, id: item, item: {first_attribute: "Updated name", second_attribute: 23}
+				#change redirect as desired
 				expect(response).to redirect_to(item)
 			end
 
+			#this test assumes that validates :first_attribute, presence: true in Item model
 			it "renders edit if params are invalid" do 
 				post :update, id: item, item: {first_attribute: nil, second_attribute: 23}
 				expect(response).to render_template("edit")
