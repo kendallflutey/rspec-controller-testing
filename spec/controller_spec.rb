@@ -35,7 +35,7 @@ describe ItemController do
       # creating a double
 
       before(:each) do
-        Todo.stub(:new).and_return(item_double)
+        Item.stub(:new).and_return(item_double)
         # When the .new method is called on the Item class, return
         # the item_double. This stops the creation of a new instance
         # which stops the test hitting the database.
