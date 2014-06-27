@@ -155,6 +155,7 @@ describe ItemController do
 			end
 
 			#this test assumes that validates :first_attribute, presence: true in Item model
+			#is redundant if no params validations
 			it "renders edit if params are invalid" do 
 				post :update, id: item, item: {first_attribute: nil, second_attribute: 23}
 				expect(response).to render_template("edit")
@@ -163,22 +164,36 @@ describe ItemController do
 
 		context "not hitting the database" do 
 
+			#this creates a double to stand in place of @item in controller
 			let(:item) {double("item")}
 
 			it "finds a specific item" do
+				#the order is different here; expectation first
+				#tests that find is called and our double is returned
 	      Todo.should_recieve(:find).once.and_return(item)
 	      post :update, id: item
 	    end
 
 			it "updates an item with valid params" do 
+				#we define the attrs that we will send through to be updated
 				attrs = {first_attribute: "Updated name", second_attribute: 23}
+				#declares the method to be called in controller and what it's called with (attrs)
 				item.should_recieve(:update_attributes).with(attrs)
 				post :update, id: item, item: attrs
 			end
 
+			it "redirects to item once updated" do
+				attrs = {first_attribute: "Updated name", second_attribute: 23}
+				post :update, id: item, item: attrs
+				#change redirect as desired
+				expect(response).to redirect_to(item)
+			end
+
 			it "renders edit if params are invalid" do 
+				#creates a double and defines the behaviour expected from update_attributes method
 				item = double("item", update_attributes: false) 
 				post :update, id: 1, item: item
+				#change view to render as required
     		expect(response).to render_template("edit")
 			end
 
