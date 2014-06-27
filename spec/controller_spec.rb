@@ -98,11 +98,13 @@ describe ItemController do
     end
   end
 
-
+#--------------------------------------#
+#          The #edit action          #
+#--------------------------------------#
   describe "#edit" do
 
 	  context "hitting the database" do
-	 	#this sets up an insatnce of "Item" to be used in our tests as "item"
+	 		#this sets up an insatnce of "Item" to be used in our tests as "item"
 	  	#change "Item" and "item" as appropriate
 	  	#Also change attributes as needed or swap out for a Factory
 	    let(:item) {Item.create(first_attribute: "My name", second_attribute: 23)}
@@ -122,10 +124,6 @@ describe ItemController do
 	      expect(response).to render_template("edit")
 	    end
 	  end
-	end
-
-
-  describe "#edit" do
 
   	context "not hitting the database using mocks and doubles" do
 
@@ -146,6 +144,79 @@ describe ItemController do
 	  end
 	end
 
+#--------------------------------------#
+#          The #update action          #
+#--------------------------------------#
+	describe "#update" do 
+
+		context "hitting the database" do 
+
+			#this sets up an insatnce of "Item" to be used in our tests as "item"
+	  	#change "Item" and "item" as appropriate
+	  	#Also change attributes as needed or swap out for a Factory
+			let(:item) {Item.create(first_attribute: "My name", second_attribute: 23)}
+
+
+			it "updates an item with valid params" do 
+				#this sends a post request to the #update item
+				#it also passes the params it needs ("id" & "item") with the update
+				post :update, id: item, item: {first_attribute: "Updated name", second_attribute: 23}
+				item.reload
+				expect(item.first_attribute).to eq("Updated name")
+			end
+
+			it "redirects to item once updated" do
+				#update "item" throughout as needed
+				#sending item: can be done with a factory and one explicit change
+				post :update, id: item, item: {first_attribute: "Updated name", second_attribute: 23}
+				#change redirect as desired
+				expect(response).to redirect_to(item)
+			end
+
+			#this test assumes that validates :first_attribute, presence: true is in Item model
+			#is redundant if no params validations
+			it "renders edit if params are invalid" do 
+				post :update, id: item, item: {first_attribute: nil, second_attribute: 23}
+				expect(response).to render_template("edit")
+			end
+		end
+
+		context "not hitting the database" do 
+
+			#this creates a double to stand in place of @item in controller
+			let(:todo) {double("todo")}
+      let(:attrs) {first_attribute: "Updated name", second_attribute: 23}
+
+			it "updates an item with valid params" do 
+				#we define the attrs that we will send through to be updated
+			
+				Item.stub(:find).and_return(item)
+				#declares the method to be called in controller and what it's called with (attrs)
+				item.should_recieve(:update_attributes).with(attrs.stringify_keys)
+				post :update, id: item, item: attrs
+			end
+
+			it "redirects to item once updated" do
+				#change "item" and Item as required
+				item = stub_model(Item)
+				#stubs out find and returns stub_model
+				Item.stub(:find).and_return(item)
+				item.stub(:update_attributes).and_return(true)
+				post :update, id: item, item: attrs
+				#change redirect as desired
+				expect(response).to redirect_to(item)
+			end
+
+			it "renders edit if params are invalid" do 
+				#creates a double and defines the behaviour expected from update_attributes method
+				item = double("item", update_attributes: false) 
+				Item.stub(:find).and_return(item)
+				post :update, id: 1, item: item
+				#change view to render as required
+    		expect(response).to render_template("edit")
+			end
+		end
+	end
 end
 
 
