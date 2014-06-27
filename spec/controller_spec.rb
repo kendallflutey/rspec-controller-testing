@@ -3,9 +3,10 @@ require 'spec_helper'
 #Change "ItemController" to the appropriate name
 describe ItemController do
 
-
+#--------------------------------------#
+#          The #new action          #
+#--------------------------------------#
   describe "The #new action" do
-
     context "hitting the database" do
       # In this context, we are writing tests that will hit the
       # database.
@@ -30,8 +31,7 @@ describe ItemController do
       # In this context, we are writing tests that will NOT hit
       # the database. This can help test speeds, and remove coupling
       # with the model/db.
-
-      let {item_double: double("item_double")}
+      let(:item_double) { double("item_double")}
       # creating a double
 
       before(:each) do
@@ -43,20 +43,19 @@ describe ItemController do
       end
 
       it "creates a new item" do
-        expects(assigns(:item)).to be(item_double)
+        expect(assigns(:item)).to be(item_double)
         #expect the instance of item to be a item_double.
       end
     end
   end
 
-
+#--------------------------------------#
+#          The #create action          #
+#--------------------------------------#
   describe "The #create action" do
-
-    context "Valid params"
-
+    context "Valid params" do
       context "hitting the database" do
-
-        it "creates a new isntance of Item" do
+        it "creates a new Item" do
           expect{
           # expect can be passed a block
             post :create, item: FactoryGirl.attributes_for(:item)
@@ -64,18 +63,37 @@ describe ItemController do
             # gem. This assigns the item: instance the attributes for an
             # item.
            }.to change(Item,:count).by(1)
-           # The rest of the test says the Item model should have one more
+           # The rest of the test says the item model should have one more
            # instance
         end
 
-        #The same test could be written like this
-        it "creates a new instance of Item" do
-          let(:item) {FactoryGirl.attributes_for(:item)}
+        it "redirects to the correct url" do
+          #in this example we will test the root path
+          post :create, item: FactoryGirl.attributes_for(:item)
+          expect(response).to redirect_to root_url
+        end
+      end
 
-          post :create, item: item
-          expect(response).to change(Item,:count).by(1)
+      context "not hitting the database" do
+        let(:item_double) { double("item_double")}
+        before(:each) do
+          Item.stub(:new).and_return(item_double)
+          item_double.stub(:save).and_return(true)
+          # we need to stub the #new and the #save methods on the
+          # class and double
         end
 
+        it "creates a new item" do
+          post :create
+          #expect the instance of item to be a item_double.
+          expect(assigns(:item)).to be(item_double)
+        end
+
+        it "redirects to the correct url" do
+          #in this example we will test the root path
+          post :create
+          expect(response).to redirect_to root_url
+        end
       end
     end
   end
