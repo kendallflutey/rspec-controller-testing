@@ -52,11 +52,11 @@ describe ItemController do
 
   describe "The #create action" do
 
-    context "Valid params"
+    context "Valid params" do
 
       context "hitting the database" do
 
-        it "creates a new isntance of Item" do
+        it "creates a new Item" do
           expect{
           # expect can be passed a block
             post :create, item: FactoryGirl.attributes_for(:item)
@@ -68,12 +68,10 @@ describe ItemController do
            # instance
         end
 
-        #The same test could be written like this
-        it "creates a new instance of Item" do
-          let(:item) {FactoryGirl.attributes_for(:item)}
-
-          post :create, item: item
-          expect(response).to change(Item,:count).by(1)
+        it "redirects to the correct url" do
+          #in this example we will test the root path
+          post :create, item: FactoryGirl.attributes_for(:item)
+          expect(response).to redirect_to root_url
         end
 
       end
