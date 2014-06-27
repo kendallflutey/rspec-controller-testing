@@ -133,6 +133,11 @@ describe ItemController do
 	  	#Also change attributes as needed or swap out for a Factory
 			let(:item) {Item.create(first_attribute: "My name", second_attribute: 23)}
 
+			#change "item" to appropriate instance
+	    it "finds a specific item" do
+	      expect(assigns(:item)).to eq(item)
+	    end
+
 			it "updates an item with valid params" do 
 				#this sends a post request to the #update item
 				#it also passes the params it needs ("id" & "item") with the update
@@ -150,6 +155,29 @@ describe ItemController do
 				post :update, id: item, item: {first_attribute: nil, second_attribute: 23}
 				expect(response).to render_template("edit")
 			end
+		end
+
+		context "not hitting the database" do 
+
+			let(:item) {double("item")}
+
+			it "finds a specific item" do
+	      Todo.should_recieve(:find).once.and_return(item)
+	      post :update, id: item
+	    end
+
+			it "updates an item with valid params" do 
+				attrs = {first_attribute: "Updated name", second_attribute: 23}
+				item.should_recieve(:update_attributes).with(attrs)
+				post :update, id: item, item: attrs
+			end
+
+			it "renders edit if params are invalid" do 
+				item = double("item", update_attributes: false) 
+				post :update, id: 1, item: item
+    		expect(response).to render_template("edit")
+			end
+
 		end
 	end
 end
