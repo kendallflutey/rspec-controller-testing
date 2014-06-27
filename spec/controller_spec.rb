@@ -84,7 +84,7 @@ describe ItemController do
   describe "#edit" do
 
 	  context "hitting the database" do
-	 	#this sets up an insatnce of "Item" to be used in our tests as "item"
+	 		#this sets up an insatnce of "Item" to be used in our tests as "item"
 	  	#change "Item" and "item" as appropriate
 	  	#Also change attributes as needed or swap out for a Factory
 	    let(:item) {Item.create(first_attribute: "My name", second_attribute: 23)}
@@ -128,6 +128,33 @@ describe ItemController do
 	  end
 	end
 
+	describe "#update" do 
+
+		context "hitting the database" do 
+
+			#this sets up an insatnce of "Item" to be used in our tests as "item"
+	  	#change "Item" and "item" as appropriate
+	  	#Also change attributes as needed or swap out for a Factory
+			let(:item) {Item.create(first_attribute: "My name", second_attribute: 23)}
+
+
+			it "updates an item with valid params" do 
+				post :update, id: item, item: {first_attribute: "Updated name", second_attribute: 23}
+				item.reload
+				expect(item.first_attribute).to eq("Updated name")
+			end
+
+			it "redirects to item once updated" do 
+				post :update, id: item, item: {first_attribute: "Updated name", second_attribute: 23}
+				expect(response).to redirect_to(item)
+			end
+
+			it "renders edit if params are invalid" do 
+				post :update, id: item, item: {first_attribute: nil, second_attribute: 23}
+				expect(response).to render_template("edit")
+			end
+		end
+	end
 end
 
 
