@@ -1,6 +1,8 @@
 #A template for Rails Rspec controller testing
 ---
+
 We have used a generic "ItemController" and a subsequent "Item" model, with 'item' objects. Update your controller test to include the appropriate model/controller names.
+
 ---
 ##New Action
 This tests the #new action in the controller, we provide some examples for tests, both hitting the database and not.
