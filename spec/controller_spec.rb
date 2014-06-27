@@ -2,11 +2,11 @@ require 'spec_helper'
 
 #Change "ItemController" to the appropriate name
 describe ItemController do
-  
-  context "hitting the database" do 
-	  describe "#edit" do 
 
-	  	#this sets up an insatnce of "Item" to be used in our tests as "item"
+  describe "#edit" do 
+
+	  context "hitting the database" do 
+	 	#this sets up an insatnce of "Item" to be used in our tests as "item"
 	  	#change "Item" and "item" as appropriate
 	  	#Also change attributes as needed or swap out for a Factory
 	    let(:item) {Item.create(first_attribute: "My name", second_attribute: 23)}
@@ -29,9 +29,10 @@ describe ItemController do
 	end
 
 
-  context "not hitting the database using mocks and doubles" do 
-	  describe "#edit" do 
+  describe "#edit" do 
 
+  	context "not hitting the database using mocks and doubles" do 
+	
 	  	#this creates a double for item that can be used for further tests
 	  	let(:item) {double("item")}
 
