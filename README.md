@@ -101,7 +101,7 @@ end
 ```
 ###Context: without hitting the database
 ```ruby
-let(:todo) {double("todo")}
+let(:item) {double("todo")}
 let(:attrs) {first_attribute: "Updated name", second_attribute: 23}
 
 it "updates an item with valid params" do
