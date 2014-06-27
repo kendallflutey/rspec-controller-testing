@@ -30,22 +30,17 @@ describe ItemController do
 
 
   context "not hitting the database using mocks and doubles" do 
-
 	  describe "#edit" do 
 
+	  	#this creates a double for item that can be used for further tests
 	  	let(:item) {double("item")}
-
-	  	#this calls the #get action before each test
-	  	before(:each) do 
-	      get :edit, id: item
-	    end
 
 	    #uses mocks to test that find was called and the correct id is passed
 	    #change "Todo" to the name of your Class
 	    it "finds a specific item" do 
 	      Todo.should_recieve(:find).once.and_return(item)
+	      get :edit, id: item 
 	    end
-
 
 	    #there should be nothing to change here unless you render a view other than edit
 	    it "renders the edit view" do 
