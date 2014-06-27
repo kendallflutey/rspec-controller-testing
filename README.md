@@ -31,7 +31,7 @@ it "creates a new item" do
 end
 ```
 ---
-##Create Action
+##\#Create Action
 This tests the #create action in the controller, we provide some examples for tests, both hitting the database and not.
 
 ###Context: with hitting the database
@@ -61,7 +61,7 @@ it "redirects to the correct url" do
 end
 ```
 ---
-##Edit Action
+##\#Edit Action
 This tests the #edit action in the controller, we provide some examples for tests, both hitting the database and not.
 
 ###Context: with hitting the database
@@ -86,7 +86,7 @@ it "finds a specific item" do
 end
 ```
 ---
-##Update Action
+##\#Update Action
 This tests the #update action in the controller, we provide some examples for tests, both hitting the database and not.
 
 ###Context: with hitting the database
