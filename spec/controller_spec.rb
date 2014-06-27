@@ -174,7 +174,9 @@ describe ItemController do
 			end
 
 			it "redirects to item once updated" do
+				#change "item" and Item as required
 				item = stub_model(Item)
+				#stubs out find and returns stub_model
 				Item.stub(:find).and_return(item)
 				item.stub(:update_attributes).and_return(true)
 				post :update, id: item, item: attrs
