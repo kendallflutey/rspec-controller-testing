@@ -35,7 +35,7 @@ describe ItemController do
       # creating a double
 
       before(:each) do
-        Item.stub(:new).and_return(item_double)
+        allow(Item).to receive(:new).and_return(item_double)
         # When the .new method is called on the Item class, return
         # the item_double. This stops the creation of a new instance
         # which stops the test hitting the database.
@@ -77,8 +77,8 @@ describe ItemController do
       context "not hitting the database" do
         let(:item_double) { double("item_double")}
         before(:each) do
-          Item.stub(:new).and_return(item_double)
-          item_double.stub(:save).and_return(true)
+          allow(Item).to receive(:new).and_return(item_double)
+          allow(item_double).to receive(:save).and_return(true)
           # we need to stub the #new and the #save methods on the
           # class and double
         end
@@ -185,12 +185,12 @@ describe ItemController do
 
 			#this creates a double to stand in place of @item in controller
 			let(:todo) {double("todo")}
-      let(:attrs) {first_attribute: "Updated name", second_attribute: 23}
+      let(:attrs) { { first_attribute: "Updated name", second_attribute: 23} }
 
 			it "updates an item with valid params" do 
 				#we define the attrs that we will send through to be updated
 			
-				Item.stub(:find).and_return(item)
+				allow(Item).to receive(:find).and_return(item)
 				#declares the method to be called in controller and what it's called with (attrs)
 				item.should_recieve(:update_attributes).with(attrs.stringify_keys)
 				post :update, id: item, item: attrs
@@ -200,8 +200,8 @@ describe ItemController do
 				#change "item" and Item as required
 				item = stub_model(Item)
 				#stubs out find and returns stub_model
-				Item.stub(:find).and_return(item)
-				item.stub(:update_attributes).and_return(true)
+				allow(Item).to receive(:find).and_return(item)
+				allow(item).to receive(:update_attributes).and_return(true)
 				post :update, id: item, item: attrs
 				#change redirect as desired
 				expect(response).to redirect_to(item)
@@ -210,7 +210,7 @@ describe ItemController do
 			it "renders edit if params are invalid" do 
 				#creates a double and defines the behaviour expected from update_attributes method
 				item = double("item", update_attributes: false) 
-				Item.stub(:find).and_return(item)
+				allow(Item).to receive(:find).and_return(item)
 				post :update, id: 1, item: item
 				#change view to render as required
     		expect(response).to render_template("edit")
