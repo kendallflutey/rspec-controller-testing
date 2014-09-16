@@ -185,7 +185,7 @@ describe ItemController do
 
 			#this creates a double to stand in place of @item in controller
 			let(:todo) {double("todo")}
-      let(:attrs) {first_attribute: "Updated name", second_attribute: 23}
+      let(:attrs) { { first_attribute: "Updated name", second_attribute: 23} }
 
 			it "updates an item with valid params" do 
 				#we define the attrs that we will send through to be updated
